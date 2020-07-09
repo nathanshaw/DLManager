@@ -192,8 +192,8 @@ double Datalog::readDouble(int a) {
     uint32_t data = EEPROM.read(a + 3);
     for (int i = 2; i > -1; i--) {
         uint8_t reading = EEPROM.read(a + i);
-        // dprint(PRINT_LOG_WRITE, reading);
-        // dprint(PRINT_LOG_WRITE, "|");
+        // dprint(P_LOG_WRITE, reading);
+        // dprint(P_LOG_WRITE, "|");
         data = (data << 8) | reading;
     }
     return (double)data / DOUBLE_PRECISION;
@@ -203,8 +203,8 @@ double Datalog::readDouble() {
     uint32_t data = EEPROM.read(addr + 3);
     for (int i = 2; i > -1; i--) {
         uint8_t reading = EEPROM.read(addr + i);
-        // dprint(PRINT_LOG_WRITE, reading);
-        // dprint(PRINT_LOG_WRITE, "|");
+        // dprint(P_LOG_WRITE, reading);
+        // dprint(P_LOG_WRITE, "|");
         data = (data << 8) | reading;
     }
     return (double)data / DOUBLE_PRECISION;
@@ -244,10 +244,10 @@ uint32_t Datalog::readLong() {
 bool Datalog::writeCheck(double data) {
     if (EEPROM_WRITE_CHECK) {
         double temp = readDouble(addr);
-        dprint(PRINT_LOG_WRITE, "data check:\t");
-        dprint(PRINT_LOG_WRITE, data);
-        dprint(PRINT_LOG_WRITE, "\t");
-        dprintln(PRINT_LOG_WRITE, temp);
+        dprint(P_LOG_WRITE, "data check:\t");
+        dprint(P_LOG_WRITE, data);
+        dprint(P_LOG_WRITE, "\t");
+        dprintln(P_LOG_WRITE, temp);
         if (data != temp) {
             return false;
         }
@@ -259,10 +259,10 @@ bool Datalog::writeCheck(double data) {
 bool Datalog::writeCheck(uint8_t data) {
     if (EEPROM_WRITE_CHECK) {
         uint8_t temp = EEPROM.read(addr);
-        dprint(PRINT_LOG_WRITE, "data check:\t");
-        dprint(PRINT_LOG_WRITE, data);
-        dprint(PRINT_LOG_WRITE, "\t");
-        dprintln(PRINT_LOG_WRITE, temp);
+        dprint(P_LOG_WRITE, "data check:\t");
+        dprint(P_LOG_WRITE, data);
+        dprint(P_LOG_WRITE, "\t");
+        dprintln(P_LOG_WRITE, temp);
         if (data != temp) {
             return false;
         }
@@ -274,10 +274,10 @@ bool Datalog::writeCheck(uint8_t data) {
 bool Datalog::writeCheck(uint16_t data) {
     if (EEPROM_WRITE_CHECK) {
         uint16_t temp = readShort(addr);
-        dprint(PRINT_LOG_WRITE, "data check:\t");
-        dprint(PRINT_LOG_WRITE, data);
-        dprint(PRINT_LOG_WRITE, "\t");
-        dprintln(PRINT_LOG_WRITE, temp);
+        dprint(P_LOG_WRITE, "data check:\t");
+        dprint(P_LOG_WRITE, data);
+        dprint(P_LOG_WRITE, "\t");
+        dprintln(P_LOG_WRITE, temp);
         if (data != temp) {
             return false;
         }
@@ -289,10 +289,10 @@ bool Datalog::writeCheck(uint16_t data) {
 bool Datalog::writeCheck(uint32_t data) {
     if (EEPROM_WRITE_CHECK) {
         uint32_t temp = readLong(addr);
-        dprint(PRINT_LOG_WRITE, "data check:\t");
-        dprint(PRINT_LOG_WRITE, data);
-        dprint(PRINT_LOG_WRITE, "\t");
-        dprintln(PRINT_LOG_WRITE, temp);
+        dprint(P_LOG_WRITE, "data check:\t");
+        dprint(P_LOG_WRITE, data);
+        dprint(P_LOG_WRITE, "\t");
+        dprintln(P_LOG_WRITE, temp);
         if (data != temp) {
             return false;
         }
@@ -305,31 +305,31 @@ bool Datalog::writeCheck(uint32_t data) {
 
 bool Datalog::update() {
     // if the log is currently active
-    dprint(PRINT_LOG_WRITE, id);
+    dprint(P_LOG_WRITE, id);
     if (active == false) {
-        // dprint(PRINT_LOG_WRITE, id);
-        dprint(PRINT_LOG_WRITE, " not active, not updating");
+        // dprint(P_LOG_WRITE, id);
+        dprint(P_LOG_WRITE, " not active, not updating");
         return 0;
     }
     // if we got this far then everything is good for an update
-    dprint(PRINT_LOG_WRITE, " updated ");
-    // dprint(PRINT_LOG_WRITE, id);
+    dprint(P_LOG_WRITE, " updated ");
+    // dprint(P_LOG_WRITE, id);
     switch(data_type) {
         case DATATYPE_SHORT:
             writeShort();
-            dprintln(PRINT_LOG_WRITE, *sval);
+            dprintln(P_LOG_WRITE, *sval);
             break;
         case DATATYPE_DOUBLE:
             writeDouble();
-            dprintln(PRINT_LOG_WRITE, *dval);
+            dprintln(P_LOG_WRITE, *dval);
             break;
         case DATATYPE_BYTE:
             EEPROM.update(addr, *bval);
-            dprintln(PRINT_LOG_WRITE, *bval);
+            dprintln(P_LOG_WRITE, *bval);
             break;
         case DATATYPE_LONG:
             writeLong();
-            dprintln(PRINT_LOG_WRITE, *lval);
+            dprintln(P_LOG_WRITE, *lval);
             break;
     }
     // print some feedback if the appropiate flag is set
@@ -342,7 +342,7 @@ bool Datalog::update() {
         if (addr + value_size > end_addr) {
             autolog_active = false;
             active = false;
-            dprintln(PRINT_LOG_WRITE, "Autolog deactivated, allocated memory has been used up");
+            dprintln(P_LOG_WRITE, "Autolog deactivated, allocated memory has been used up");
         }
     }
     return 1;
@@ -352,8 +352,8 @@ void Datalog::clear() {
     for (unsigned int i = start_addr; i < end_addr; i++) {
         EEPROM.update(i, 0);
     }
-    dprint(PRINT_LOG_WRITE, "Cleared the "); dprint(PRINT_LOG_WRITE, id);
-    dprintln(PRINT_LOG_WRITE, " Datalog");
+    dprint(P_LOG_WRITE, "Cleared the "); dprint(P_LOG_WRITE, id);
+    dprintln(P_LOG_WRITE, " Datalog");
 }
 
 
@@ -362,22 +362,22 @@ void Datalog::printlog(uint8_t lines) {
 }
 
 void Datalog::printLog(uint8_t lines) {
-    //printDivide(PRINT_LOG_WRITE);
-    dprint(PRINT_LOG_WRITE, "Printing the ");
-    dprint(PRINT_LOG_WRITE, id);
+    //printDivide(P_LOG_WRITE);
+    dprint(P_LOG_WRITE, "Printing the ");
+    dprint(P_LOG_WRITE, id);
     uint32_t per_line;
     if (end_addr > start_addr) {
         per_line = (end_addr - start_addr) / value_size / lines;
     } else {
         per_line =  1;
     }
-    dprint(PRINT_LOG_WRITE, " from start/end addr : ");
-    dprint(PRINT_LOG_WRITE, start_addr);dprint(PRINT_LOG_WRITE,"-");
-    dprint(PRINT_LOG_WRITE, end_addr);
+    dprint(P_LOG_WRITE, " from start/end addr : ");
+    dprint(P_LOG_WRITE, start_addr);dprint(P_LOG_WRITE,"-");
+    dprint(P_LOG_WRITE, end_addr);
     if (end_addr - start_addr > 4)  {
-        dprintln(PRINT_LOG_WRITE, "\t");
+        dprintln(P_LOG_WRITE, "\t");
     } else  {
-        dprint(PRINT_LOG_WRITE, "\t");
+        dprint(P_LOG_WRITE, "\t");
     }
     uint8_t itters = 0;
     double d = 0.0;
@@ -390,29 +390,29 @@ void Datalog::printLog(uint8_t lines) {
         switch(data_type){
             case DATATYPE_LONG:
                 l = readLong(i);
-                dprint(PRINT_LOG_WRITE, l);
+                dprint(P_LOG_WRITE, l);
                 break;
             case DATATYPE_BYTE:
                 b = EEPROM.read(i);
-                dprint(PRINT_LOG_WRITE, b);
+                dprint(P_LOG_WRITE, b);
                 break;
             case DATATYPE_SHORT:
                 iv = readShort(i);
-                dprint(PRINT_LOG_WRITE, iv);
+                dprint(P_LOG_WRITE, iv);
                 break;
             case DATATYPE_DOUBLE:
                 d = readDouble(i);
-                dprint(PRINT_LOG_WRITE, d);
+                dprint(P_LOG_WRITE, d);
                 break;
         }
         // print tab or line depending on how many prints have occured so far
         if (itters % per_line == 0) {
-            dprintln(PRINT_LOG_WRITE);
+            dprintln(P_LOG_WRITE);
         } else {
-            dprint(PRINT_LOG_WRITE, "\t");
+            dprint(P_LOG_WRITE, "\t");
         }
     }
-    dprintln(PRINT_LOG_WRITE);
+    dprintln(P_LOG_WRITE);
 }
 
 #endif // __DATALOG_CONF_H__
