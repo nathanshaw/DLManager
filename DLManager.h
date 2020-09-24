@@ -1,7 +1,6 @@
 #ifndef __DLMANAGER_H__
 #define __DLMANAGER_H__
 
-#include "../Configuration.h"
 #include <Arduino.h>
 #include <EEPROM.h>
 #include "Datalog.h"

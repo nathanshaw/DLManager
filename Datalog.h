@@ -1,7 +1,6 @@
 #ifndef __DATALOG_H__
 #define __DATALOG_H__
 
-#include "../Configuration.h"
 #include <EEPROM.h>
 
 class Datalog {
