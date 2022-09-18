@@ -457,7 +457,9 @@ void DLManager::update() {
                     }
                      else if (DLM_PRINT) {
                          Serial.print("not updating log ");Serial.print(logs[log].getName());
-                         Serial.print(" u_time is less than refresh_length: ");
+                         Serial.print(" u_time is less than refresh_length for timer #");
+                         Serial.print(timer_num);
+                         Serial.print(": ");
                          Serial.print(u_time);Serial.print(" / ");Serial.println(log_refresh_length[timer_num]);
                      }
                  }
